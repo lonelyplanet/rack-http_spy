@@ -1,53 +1,49 @@
-require 'webmock'
-require 'digest/sha1'
+require "rack/http_spy/request_store"
+require "rack/http_spy/reporter"
+require "rack/http_spy/spy"
 
 module Rack
   module HTTPSpy
     class Middleware
-      include Rack::Utils
+      attr_reader :options, :app
 
       def initialize(app, options = {})
         @options = options
         @app     = app
-        @store   = RequestStore.new
-        setup_webmock
+        activate_webmock_hook
       end
 
       def call(env)
-        @env = env
-        request = Rack::Request.new(env)
-        if request.GET['_spy'] != nil
-          @store.clear!
-          @app.call(env)
-          @store.report
-        else
-          @app.call(env)
-        end
+        Spy.spy(env: env, middleware: self)
+      end
+
+      def store
+        @store ||= options.fetch(:store, RequestStore.new)
+      end
+
+      def reporter
+        @reporter ||= options.fetch(:reporter, Reporter)
+      end
+
+      def logger
+        @logger ||= options.fetch(:logger, nil)
+      end
+
+      def format
+        @format ||= options.fetch(:format, :text)
+      end
+
+      def log_level
+        @log_level ||= options.fetch(:log_level, :summary)
       end
 
       private
 
-      def setup_webmock
-        WebMock.disable_net_connect!(:allow => ["localhost", "127.0.0.1"])
-        WebMock.after_request do |req_signature, response|
-          @store.store(req_signature, response)
-        end
-      end
-
-      class RequestStore
-        def initialize
-          clear!
-        end
-
-        def store(req_signature, response)
-          h = Digest::SHA1.hexdigest(req_signature.to_s)
-          @hash[h] += 1
-        end
-
-        private
-
-        def clear!
-          @hash = Hash.new { |h, k| h[k] = 0 }
+      def activate_webmock_hook
+        # activate WebMock, but allow every request
+        WebMock.disable_net_connect!(allow: /.*/)
+        WebMock.after_request do |req, _|
+          store.store(request: req)
         end
       end
     end

@@ -1,7 +1,8 @@
 rack-http_spy [![travis-ci](https://travis-ci.org/textgoeshere/rack-http_spy.png)](https://travis-ci.org/textgoeshere/rack-http_spy)
 ==================
 
-Queues for quicker cukes!
+Trace and report all HTTP requests made by your app.
+Built on WebMock so works with many HTTP adapters
 
 [![Code Climate](https://codeclimate.com/github/textgoeshere/rack-http_spy.png)](https://codeclimate.com/github/textgoeshere/rack-http_spy)
 
@@ -12,31 +13,40 @@ Queues for quicker cukes!
 
 ## Usage
 
-Don't use this in production - but you won't learn anything interesting about your app running this in development mode either. Instead, create a production-like environment, e.g. "profile".
+Add this to your Gemfile:
 
-For Rails 3, add the following to your Gemfile.
+    gem 'rack-http_spy', :require => 'rack/http_spy'
 
-    gem 'rack-perftools_profiler', :require => 'rack/perftools_profiler'
+Don't use `Rack::HTTPSpy` in production. You'll get cleaner results
+and your app will be safer if you create a dedicated profile
+environment.
 
-and add the following to config/application.rb
+For Rails, add this to `config/environments/profile.rb`:
 
-    config.middleware.use ::Rack::GCProfiler
+    config.middleware.use ::Rack::HTTPSpy
 
 For Sinatra, call `use` inside a configure block, like so:
 
     configure do
-      use ::Rack::GCProfiler
+      use ::Rack::HTTPSpy
     end
 
-For Rack::Builder, call `use` inside the Builder constructor block
+For Rack::Builder, call `use` inside the Builder constructor block:
 
     Rack::Builder.new do
-      use ::Rack::GCProfiler
+      use ::Rack::HTTPSpy
     end
 
-## Options
+## TODO
 
-* `:default_printer` - can be set to 'text', 'json'. Default is text.
+### Features
+
+* Add json and html printers
+* Add different log levels
+
+### Tech debt
+
+* DRY-up request body matching in reports_spec
 
 ## Related projects
 
