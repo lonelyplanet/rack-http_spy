@@ -3,12 +3,8 @@ rack-http_spy
 
 Trace and report all HTTP requests made by your app. Built on [WebMock](https://github.com/bblimke/webmock) so works with many HTTP adapters.
 
-<table>
-  <tr>
-    <td>[![travis-ci](https://travis-ci.org/lonelyplanet/rack-http_spy.png)](https://travis-ci.org/lonelyplanet/rack-http_spy)</td>
-    <td>[![Code Climate](https://codeclimate.com/github/lonelyplanet/rack-http_spy.png)](https://codeclimate.com/github/lonelyplanet/rack-http_spy)</td>
-  </tr>
-</table>
+[![travis-ci](https://travis-ci.org/lonelyplanet/rack-http_spy.png)](https://travis-ci.org/lonelyplanet/rack-http_spy)
+[![Code Climate](https://codeclimate.com/github/lonelyplanet/rack-http_spy.png)](https://codeclimate.com/github/lonelyplanet/rack-http_spy)
 
 ## Requirements
 
