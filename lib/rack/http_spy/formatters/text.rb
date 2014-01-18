@@ -8,7 +8,7 @@ module Rack
       def to_s
         Array.new.tap do |r|
           r << title
-          r << ('=' * title.chars.size)
+          r << ('=' * title.chars.to_a.length)
           list.each do |hsh, req|
             r << "#{req[:sig].method.upcase} #{req[:sig].uri.to_s}: #{req[:count]}"
           end
