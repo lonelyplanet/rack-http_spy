@@ -24,8 +24,9 @@ describe "Reports" do
 
   context "plain-text" do
     context "summary" do
-      it "shows URL and method for each req" do
-        expect(body).to match /^\s?GET http:\/\/www\.example\.com:80\/foo\W+2$/mi
+      it "shows URL and method for each req, colourized when there is
+    a repeated request" do
+        expect(body).to match /^\s?\e\[31mGET http:\/\/www\.example\.com:80\/foo\W+2\e\[0m/mi
         expect(body).to match /^\s?GET http:\/\/www\.example\.com:80\/bar\W+1$/mi
       end
 

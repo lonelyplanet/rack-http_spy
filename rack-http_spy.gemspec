@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rack", "~> 1.0"
   spec.add_dependency "webmock"
+  spec.add_dependency "ansi"
 end
